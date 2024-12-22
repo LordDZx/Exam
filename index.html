@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق المذاكرة الذكي المتطور</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* لضمان تطبيق الألوان الصحيحة في الوضع الداكن */
+        .dark {
+            color-scheme: dark;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-200">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold text-primary-600 dark:text-primary-400">تطبيق المذاكرة الذكي المتطور</h1>
+            <button id="darkModeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                <i class="fas fa-moon dark:text-yellow-300"></i>
+            </button>
+        </div>
+        
+        <!-- Countdown Timer -->
+        <div class="text-center mb-8 bg-white p-6 rounded-lg shadow dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-2">العد التنازلي للامتحانات</h2>
+            <div id="countdown" class="text-3xl font-bold text-primary-600 dark:text-primary-400"></div>
+        </div>
+
+        <!-- Subject Icons -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+            <a href="#" class="bg-white p-4 rounded-lg shadow text-center transition duration-300 ease-in-out transform hover:scale-105 dark:bg-gray-800">
+                <i class="fas fa-language text-4xl mb-2 text-primary-500 dark:text-primary-400"></i>
+                <div>عربي</div>
+            </a>
+            <a href="#" class="bg-white p-4 rounded-lg shadow text-center transition duration-300 ease-in-out transform hover:scale-105 dark:bg-gray-800">
+                <i class="fas fa-globe text-4xl mb-2 text-green-500 dark:text-green-400"></i>
+                <div>إنجليزي</div>
+            </a>
+            <a href="#" class="bg-white p-4 rounded-lg shadow text-center transition duration-300 ease-in-out transform hover:scale-105 dark:bg-gray-800">
+                <i class="fas fa-atom text-4xl mb-2 text-purple-500 dark:text-purple-400"></i>
+                <div>فيزياء وكيمياء</div>
+            </a>
+            <a href="#" class="bg-white p-4 rounded-lg shadow text-center transition duration-300 ease-in-out transform hover:scale-105 dark:bg-gray-800">
+                <i class="fas fa-dna text-4xl mb-2 text-red-500 dark:text-red-400"></i>
+                <div>أحياء</div>
+            </a>
+            <a href="#" class="bg-white p-4 rounded-lg shadow text-center transition duration-300 ease-in-out transform hover:scale-105 dark:bg-gray-800">
+                <i class="fas fa-square-root-alt text-4xl mb-2 text-yellow-500 dark:text-yellow-400"></i>
+                <div>رياضيات</div>
+            </a>
+        </div>
+
+        <!-- AI Schedule Generator -->
+        <div class="bg-white p-6 rounded-lg shadow mb-8 dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">إنشاء جدول دراسة ذكي</h2>
+            <form id="scheduleForm" class="space-y-4">
+                <div>
+                    <label for="subjects" class="block mb-2">المواد (مفصولة بفواصل):</label>
+                    <input type="text" id="subjects" name="subjects" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required>
+                </div>
+                <div>
+                    <label for="studyHours" class="block mb-2">عدد ساعات الدراسة يومياً:</label>
+                    <input type="number" id="studyHours" name="studyHours" min="1" max="24" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required>
+                </div>
+                <div>
+                    <label for="startDate" class="block mb-2">تاريخ البدء:</label>
+                    <input type="date" id="startDate" name="startDate" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required>
+                </div>
+                <div>
+                    <label for="endDate" class="block mb-2">تاريخ الانتهاء:</label>
+                    <input type="date" id="endDate" name="endDate" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required>
+                </div>
+                <div>
+                    <label for="difficulty" class="block mb-2">صعوبة المواد (من 1 إلى 5، مفصولة بفواصل):</label>
+                    <input type="text" id="difficulty" name="difficulty" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600" required>
+                </div>
+                <button type="submit" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-600 transition duration-300 dark:bg-primary-600 dark:hover:bg-primary-700">إنشاء الجدول الذكي</button>
+            </form>
+        </div>
+
+        <!-- Generated Schedule -->
+        <div id="generatedSchedule" class="bg-white p-6 rounded-lg shadow hidden mb-8 dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">جدول الدراسة الذكي المقترح</h2>
+            <div id="scheduleContent" class="space-y-4"></div>
+            <div id="scheduleCalendar"></div>
+            <button id="shareSchedule" class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300 dark:bg-green-600 dark:hover:bg-green-700">مشاركة الجدول</button>
+        </div>
+
+        <!-- Study Statistics -->
+        <div class="bg-white p-6 rounded-lg shadow mb-8 dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">إحصائيات المذاكرة</h2>
+            <div id="studyStats" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">ساعات المذاكرة اليوم:</h3>
+                    <input type="number" id="todayStudyHours" min="0" max="24" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <button id="updateStudyHours" class="mt-2 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-600 transition duration-300 dark:bg-primary-600 dark:hover:bg-primary-700">تحديث</button>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">التقدم في المواد:</h3>
+                    <div id="subjectProgress"></div>
+                </div>
+            </div>
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold mb-2">تقدم المذاكرة الأسبوعي:</h3>
+                <canvas id="weeklyProgressChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Educational Resources -->
+        <div class="bg-white p-6 rounded-lg shadow mb-8 dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">مصادر تعليمية</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">فيديوهات شرح:</h3>
+                    <ul class="list-disc list-inside">
+                        <li><a href="#" class="text-primary-500 hover:underline dark:text-primary-400">شرح الفيزياء: قوانين نيوتن</a></li>
+                        <li><a href="#" class="text-primary-500 hover:underline dark:text-primary-400">دروس اللغة العربية: البلاغة</a></li>
+                        <li><a href="#" class="text-primary-500 hover:underline dark:text-primary-400">الرياضيات: التفاضل والتكامل</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">كتب ومراجع:</h3>
+                    <ul class="list-disc list-inside">
+                        <li><a href="#" class="text-primary-500 hover:underline dark:text-primary-400">ملخص شامل للكيمياء العضوية</a></li>
+                        <li><a href="#" class="text-primary-500 hover:underline dark:text-primary-400">قواعد اللغة الإنجليزية المبسطة</a></li>
+                        <li><a href="#" class="text-primary-500 hover:underline dark:text-primary-400">أطلس التشريح لطلاب الأحياء</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Features -->
+        <div class="bg-white p-6 rounded-lg shadow mb-8 dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">ميزات تفاعلية</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">لعبة تحفيزية:</h3>
+                    <div id="quizGame" class="bg-gray-100 p-4 rounded dark:bg-gray-700">
+                        <p id="quizQuestion" class="mb-2"></p>
+                        <div id="quizOptions" class="space-y-2"></div>
+                        <button id="checkAnswer" class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300 dark:bg-green-600 dark:hover:bg-green-700">تحقق من الإجابة</button>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">شارات الإنجاز:</h3>
+                    <div id="badges" class="flex flex-wrap gap-2">
+                        <div class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm dark:bg-yellow-900 dark:text-yellow-200">مثابر</div>
+                        <div class="bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm dark:bg-primary-900 dark:text-primary-200">متفوق</div>
+                        <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm dark:bg-green-900 dark:text-green-200">منظم</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="bg-white p-6 rounded-lg shadow mb-8 dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">الأسئلة الشائعة</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">كيف أتغلب على التوتر قبل الامتحان؟</h3>
+                    <p>تنفس بعمق، مارس التأمل، ونظم وقتك جيدًا. تذكر أن بعض التوتر طبيعي ويمكن أن يكون محفزًا.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">ما هي أفضل طريقة للمراجعة؟</h3>
+                    <p>استخدم تقنيات مثل المراجعة المتباعدة، واختبر نفسك باستمرار، وحاول شرح المفاهيم لشخص آخر.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">كيف أحافظ على تركيزي أثناء المذاكرة؟</h3>
+                    <p>استخدم تقنية بومودورو (25 دقيقة دراسة، 5 دقائق راحة)، وأزل مصادر التشتيت، وحدد أهدافًا صغيرة قابلة للتحقيق.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Tips -->
+        <div class="bg-white p-6 rounded-lg shadow mt-8 dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">نصائح للمذاكرة الفعالة</h2>
+            <ul class="list-disc list-inside space-y-2">
+                <li>قسم وقت الدراسة إلى فترات قصيرة مع استراحات منتظمة</li>
+                <li>استخدم تقنيات مثل طريقة بومودورو للتركيز</li>
+                <li>راجع المواد بانتظام لتثبيت المعلومات</li>
+                <li>مارس الرياضة وتناول طعامًا صحيًا للحفاظ على نشاطك الذهني</li>
+                <li>نم جيدًا واحصل على قسط كافٍ من الراحة</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const htmlElement = document.documentElement;
+
+        function setDarkMode(isDark) {
+            if (isDark) {
+                htmlElement.classList.add('dark');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun text-yellow-300"></i>';
+            } else {
+                htmlElement.classList.remove('dark');
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!htmlElement.classList.contains('dark'));
+        });
+
+        // Load dark mode preference
+        setDarkMode(localStorage.getItem('darkMode') === 'true');
+
+        // Countdown Timer
+        function updateCountdown() {
+            const examDate = new Date("2024-06-01").getTime();
+            const now = new Date().getTime();
+            const distance = examDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById("countdown").innerHTML = `${days} يوم ${hours} ساعة ${minutes} دقيقة`;
+
+            if (distance < 0) {
+                clearInterval(countdownTimer);
+                document.getElementById("countdown").innerHTML = "انتهت فترة الامتحانات";
+            }
+        }
+
+        const countdownTimer = setInterval(updateCountdown, 1000);
+
+        // AI Schedule Generator
+        document.getElementById("scheduleForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const subjects = document.getElementById("subjects").value.split(",").map(s => s.trim());
+            const studyHours = parseInt(document.getElementById("studyHours").value);
+            const startDate = new Date(document.getElementById("startDate").value);
+            const endDate = new Date(document.getElementById("endDate").value);
+            const difficulties = document.getElementById("difficulty").value.split(",").map(d => parseInt(d.trim()));
+
+            if (subjects.length < 1 || subjects.length > 9) {
+                alert("الرجاء إدخال من 1 إلى 9 مواد.");
+                return;
+            }
+
+            if (subjects.length !== difficulties.length) {
+                alert("يجب أن يتطابق عدد المواد مع عدد مستويات الصعوبة.");
+                return;
+            }
+
+            const schedule = generateSmartSchedule(subjects, studyHours, startDate, endDate, difficulties);
+            displaySchedule(schedule, startDate, endDate);
+        });
+
+        function generateSmartSchedule(subjects, studyHours, startDate, endDate, difficulties) {
+            const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            const totalStudyHours = totalDays * studyHours;
+
+            const totalDifficulty = difficulties.reduce((a, b) => a + b, 0);
+            const weightedHours = subjects.map((subject, index) => {
+                return (difficulties[index] / totalDifficulty) * totalStudyHours;
+            });
+
+            const schedule = subjects.map((subject, index) => {
+                const subjectHours = Math.round(weightedHours[index]);
+                const daysForSubject = Math.ceil(subjectHours / studyHours);
+                const hoursPerDay = Math.min(studyHours, Math.ceil(subjectHours / daysForSubject));
+
+                return {
+                    subject: subject,
+                    daysToStudy: daysForSubject,
+                    hoursPerDay: hoursPerDay,
+                    totalHours: subjectHours,
+                    difficulty: difficulties[index]
+                };
+            });
+
+            schedule.sort((a, b) => b.difficulty - a.difficulty);
+
+            return schedule;
+        }
+
+        function displaySchedule(schedule, startDate, endDate) {
+            const scheduleContent = document.getElementById("scheduleContent");
+            const scheduleCalendar = document.getElementById("scheduleCalendar");
+            scheduleContent.innerHTML = "";
+            scheduleCalendar.innerHTML = "";
+
+            let currentDate = new Date(startDate);
+            const calendar = {};
+
+            schedule.forEach(item => {
+                const subjectDiv = document.createElement("div");
+                subjectDiv.className = "bg-gray-50 p-4 rounded-lg dark:bg-gray-700";
+                subjectDiv.innerHTML = `
+                    <h3 class="text-xl font-semibold text-primary-600 dark:text-primary-400">${item.subject}</h3>
+                    <p>عدد الأيام: ${item.daysToStudy}</p>
+                    <p>ساعات الدراسة يومياً: ${item.hoursPerDay}</p>
+                    <p>إجمالي ساعات الدراسة: ${item.totalHours}</p>
+                    <p>مستوى الصعوبة: ${'🌟'.repeat(item.difficulty)}</p>
+                    <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                        نصيحة: ${getStudyTip(item.subject)}
+                    </div>
+                `;
+                scheduleContent.appendChild(subjectDiv);
+
+                // Populate calendar
+                for (let i = 0; i < item.daysToStudy; i++) {
+                    if (currentDate <= endDate) {
+                        const dateString = currentDate.toISOString().split('T')[0];
+                        if (!calendar[dateString]) {
+                            calendar[dateString] = [];
+                        }
+                        calendar[dateString].push({
+                            subject: item.subject,
+                            hours: item.hoursPerDay
+                        });
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                }
+            });
+
+            // Display calendar
+            const calendarTable = document.createElement("table");
+            calendarTable.className = "w-full border-collapse";
+            let tableHTML = `
+                <thead>
+                    <tr>
+                        <th class="border p-2 dark:border-gray-600">التاريخ</th>
+                        <th class="border p-2 dark:border-gray-600">المواد</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+
+            for (const [date, subjects] of Object.entries(calendar)) {
+                const formattedDate = new Date(date).toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                const subjectsHTML = subjects.map(s => `${s.subject} (${s.hours} ساعات)`).join('<br>');
+                tableHTML += `
+                    <tr>
+                        <td class="border p-2 dark:border-gray-600">${formattedDate}</td>
+                        <td class="border p-2 dark:border-gray-600">${subjectsHTML}</td>
+                    </tr>
+                `;
+            }
+
+            tableHTML += '</tbody>';
+            calendarTable.innerHTML = tableHTML;
+            scheduleCalendar.appendChild(calendarTable);
+
+            document.getElementById("generatedSchedule").classList.remove("hidden");
+        }
+
+        function getStudyTip(subject) {
+            const tips = {
+                'عربي': 'تدرب على كتابة المقالات وحل أسئلة القواعد بانتظام',
+                'إنجليزي': 'استمع إلى محتوى باللغة الإنجليزية يومياً لتحسين مهاراتك',
+                'فيزياء': 'ركز على حل المسائل وفهم القوانين الأساسية',
+                'كيمياء': 'استخدم الرسومات والنماذج لفهم التفاعلات الكيميائية',
+                'أحياء': 'استعن بالرسومات التوضيحية وقم بتلخيص المفاهيم الرئيسية',
+                'رياضيات': 'تدرب على حل المسائل يومياً وراجع القوانين بانتظام'
+            };
+            return tips[subject] || 'قسم الموضوع إلى أجزاء صغيرة وادرسها بالتفصيل';
+        }
+
+        // Share Schedule
+        document.getElementById("shareSchedule").addEventListener("click", function() {
+            const scheduleContent = document.getElementById("scheduleContent").innerText;
+            const shareText = encodeURIComponent("شاهد جدول دراستي:\n\n" + scheduleContent);
+            const whatsappUrl = `https://wa.me/?text=${shareText}`;
+            window.open(whatsappUrl, '_blank');
+        });
+
+        // Study Statistics
+        document.getElementById("updateStudyHours").addEventListener("click", function() {
+            const hours = document.getElementById("todayStudyHours").value;
+            localStorage.setItem('todayStudyHours', hours);
+            updateStudyStats();
+        });
+
+        function updateStudyStats() {
+            const todayHours = localStorage.getItem('todayStudyHours') || 0;
+            document.getElementById("todayStudyHours").value = todayHours;
+
+            const subjectProgress = document.getElementById("subjectProgress");
+            subjectProgress.innerHTML = "";
+            const subjects = ['عربي', 'إنجليزي', 'فيزياء', 'كيمياء', 'رياضيات'];
+            subjects.forEach(subject => {
+                const progress = Math.floor(Math.random() * 101); // Simulated progress
+                const progressBar = document.createElement("div");
+                progressBar.className = "mb-2";
+                progressBar.innerHTML = `
+                    <div class="flex justify-between mb-1">
+                        <span>${subject}</span>
+                        <span>${progress}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div class="bg-primary-600 h-2.5 rounded-full dark:bg-primary-500" style="width: ${progress}%"></div>
+                    </div>
+                `;
+                subjectProgress.appendChild(progressBar);
+            });
+        }
+
+        updateStudyStats();
+
+        // Quiz Game
+        const quizQuestions = [
+            { question: "ما هي عاصمة مصر؟", options: ["القاهرة", "الإسكندرية", "الأقصر", "أسوان"], answer: 0 },
+            { question: "كم عدد كواكب المجموعة الشمسية؟", options: ["7", "8", "9", "10"], answer: 1 },
+            { question: "ما هو أكبر محيط في العالم؟", options: ["الأطلسي", "الهندي", "الهادئ", "المتجمد الشمالي"], answer: 2 }
+        ];
+
+        let currentQuestion = 0;
+
+        function displayQuizQuestion() {
+            const quiz = quizQuestions[currentQuestion];
+            document.getElementById("quizQuestion").textContent = quiz.question;
+            const optionsContainer = document.getElementById("quizOptions");
+            optionsContainer.innerHTML = "";
+            quiz.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.className = "w-full text-left p-2 rounded bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 transition duration-300";
+                button.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(index) {
+            const buttons = document.querySelectorAll("#quizOptions button");
+            buttons.forEach(button => button.classList.remove("bg-primary-500", "text-white"));
+            buttons[index].classList.add("bg-primary-500", "text-white");
+        }
+
+        document.getElementById("checkAnswer").addEventListener("click", function() {
+            const selectedButton = document.querySelector("#quizOptions button.bg-primary-500");
+            if (selectedButton) {
+                const selectedIndex = Array.from(selectedButton.parentNode.children).indexOf(selectedButton);
+                if (selectedIndex === quizQuestions[currentQuestion].answer) {
+                    alert("إجابة صحيحة!");
+                    currentQuestion = (currentQuestion + 1) % quizQuestions.length;
+                    displayQuizQuestion();
+                } else {
+                    alert("إجابة خاطئة. حاول مرة أخرى!");
+                }
+            } else {
+                alert("الرجاء اختيار إجابة!");
+            }
+        });
+
+        displayQuizQuestion();
+
+        // Simulated Notifications
+        function showNotification(message) {
+            const notification = document.createElement("div");
+            notification.textContent = message;
+            notification.className = "fixed bottom-4 right-4 bg-primary-500 text-white p-4 rounded-lg shadow-lg transition-opacity duration-300 opacity-0 dark:bg-primary-600";
+            document.body.appendChild(notification);
+            setTimeout(() => notification.classList.remove("opacity-0"), 100);
+            setTimeout(() => {
+                notification.classList.add("opacity-0");
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // Simulated reminders
+        setInterval(() => {
+            const messages = [
+                "حان وقت المذاكرة!",
+                "لا تنس أخذ استراحة قصيرة",
+                "راجع جدول دراستك اليوم",
+                "تذكر شرب الماء أثناء المذاكرة"
+            ];
+            showNotification(messages[Math.floor(Math.random() * messages.length)]);
+        }, 300000); // Every 5 minutes
+
+        // Weekly Progress Chart
+        const ctx = document.getElementById('weeklyProgressChart').getContext('2d');
+        const weeklyData = [
+            { day: 'الأحد', hours: 2 },
+            { day: 'الإثنين', hours: 3 },
+            { day: 'الثلاثاء', hours: 4 },
+            { day: 'الأربعاء', hours: 2 },
+            { day: 'الخميس', hours: 5 },
+            { day: 'الجمعة', hours: 3 },
+            { day: 'السبت', hours: 1 },
+        ];
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: weeklyData.map(data => data.day),
+                datasets: [{
+                    label: 'ساعات المذاكرة',
+                    data: weeklyData.map(data => data.hours),
+                    backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                    borderColor: 'rgb(59, 130, 246)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'الساعات'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: htmlElement.classList.contains('dark') ? 'rgb(229, 231, 235)' : 'rgb(17, 24, 39)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Update chart colors when dark mode changes
+        darkModeToggle.addEventListener('click', () => {
+            const chart = Chart.getChart(ctx);
+            if (chart) {
+                chart.options.plugins.legend.labels.color = htmlElement.classList.contains('dark') ? 'rgb(229, 231, 235)' : 'rgb(17, 24, 39)';
+                chart.update();
+            }
+        });
+    </script>
+</body>
+</html>
+
